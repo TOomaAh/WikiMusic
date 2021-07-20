@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_home"
+    app:startDestination="@id/chartsFragment">
+
+    <fragment
+        android:id="@+id/chartsFragment"
+        android:name="com.example.wikimusic.ChartsFragment"
+        android:label="ChartsFragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.wikimusic.SearchFragment"
+        android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.wikimusic.FavoritesFragment"
+        android:label="FavoritesFragment" />
+</navigation>

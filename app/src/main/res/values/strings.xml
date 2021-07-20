@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">WikiMusic</string>
+    <string name="track">Tracks</string>
+    <string name="album">Record</string>
+    <string name="loved_tracks">Most liked tracks</string>
+    <string name="charts">Charts</string>
+    <string name="lyrics">Lyrics</string>
+    <string name="search">Search</string>
+    <string name="artists">Artists</string>
+    <string name="songs">songs</string>
+    <string name="favorites">Favorites</string>
+    <string name="artists_record">My artists</string>
+    <string name="research">Research</string>
 </resources>

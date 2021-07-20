@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WikiMusic</string>
+    <string name="track">Titres</string>
+    <string name="album">Album</string>
+    <string name="loved_tracks">Titres les plus appréciés</string>
+    <string name="charts">Classements</string>
+    <string name="lyrics">Paroles</string>
+    <string name="search">Rechercher</string>
+    <string name="artists">Artistes</string>
+    <string name="songs">chansons</string>
+    <string name="favorites">Favoris</string>
+    <string name="artists_record">Mes artistes</string>
+    <string name="research">Recherche</string>
+</resources>
