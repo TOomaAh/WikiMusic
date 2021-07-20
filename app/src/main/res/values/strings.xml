@@ -9,6 +9,6 @@
     <string name="artists">Artists</string>
     <string name="songs">songs</string>
     <string name="favorites">Favorites</string>
-    <string name="artists_record">My artists</string>
+    <string name="artists_record">My artists &amp; records</string>
     <string name="research">Research</string>
 </resources>

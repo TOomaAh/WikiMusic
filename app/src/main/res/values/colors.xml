@@ -10,4 +10,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="bottom_bar_default">#FFb9b9b9</color>FFb9b9b9
     <color name="bottom_bar_text">#FFf3f3f3</color>FFf3f3f3
+    <color name="grey">#FFA1A1A1</color>
 </resources>
