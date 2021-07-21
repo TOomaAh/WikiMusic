@@ -34,7 +34,7 @@ class SearchFragment : Fragment() {
 
         //Selon le prof
 //        view.recyclerArtistSearch.layoutManager = LinearLayoutManager(requireContext())
-//        view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(list_artsite);
+//        view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(list_artist);
 //
 //        view.recyclerRecordSearch.layoutManager = LinearLayoutManager(requireContext())
 //        view.recyclerRecordSearch.adapter = ItemListAdapter<Album>(list_album);

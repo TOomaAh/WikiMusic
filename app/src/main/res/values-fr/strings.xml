@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">WikiMusic</string>
     <string name="track">Titres</string>
-    <string name="album">Album</string>
+    <string name="album">Albums</string>
     <string name="loved_tracks">Titres les plus appréciés</string>
     <string name="charts">Classements</string>
     <string name="lyrics">Paroles</string>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">WikiMusic</string>
     <string name="track">Tracks</string>
-    <string name="album">Record</string>
+    <string name="album">Records</string>
     <string name="loved_tracks">Most liked tracks</string>
     <string name="charts">Charts</string>
     <string name="lyrics">Lyrics</string>
