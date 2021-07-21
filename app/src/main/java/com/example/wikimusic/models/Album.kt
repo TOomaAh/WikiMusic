@@ -1,4 +1,4 @@
-package com.example.wikimusic
+package com.example.wikimusic.models
 
 class Album(
     val idAlbum: String?,

@@ -1,4 +1,4 @@
-package com.example.wikimusic
+package com.example.wikimusic.models
 
 class Track(
     val idTrack: String?,

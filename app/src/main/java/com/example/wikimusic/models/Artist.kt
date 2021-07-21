@@ -1,4 +1,4 @@
-package com.example.wikimusic
+package com.example.wikimusic.models
 
 class Artist(val idArtist: String?,
                 val strArtist: String?,
@@ -49,4 +49,8 @@ class Artist(val idArtist: String?,
                 val intCharted: String?,
                 val strLocked: String?
 ) {
+
+    override fun toString(): String {
+        return "$strArtist (${idArtist})"
+    }
 }
