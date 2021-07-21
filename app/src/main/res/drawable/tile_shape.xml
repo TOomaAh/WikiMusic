@@ -4,8 +4,7 @@
         android:radius="10dp"
         />
 
-
     <solid
-        android:color="@color/bottom_bar_default" />
+        android:color="@color/bottom_bar_text" />
 
 </shape>

@@ -20,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:background="@drawable/album_icon_shape"
-            android:src="@drawable/ic_placeholder_album"
+            android:background="@drawable/artist_icon_shape"
+            android:src="@drawable/ic_placeholder_artiste"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="VectorDrawableCompat" />
@@ -30,23 +30,14 @@
             android:id="@+id/itemNameText"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toRightOf="@id/itemAlbumIcon"
-            android:layout_margin="15dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="15dp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:text="Full of Fire"
+            android:text="Al Green"
             android:textSize="18sp"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
-
-        <TextView
-            android:id="@+id/artist_name_album"
-            android:layout_width="wrap_content"
-            android:text="Al Green"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/itemNameText"
-            app:layout_constraintLeft_toRightOf="@id/itemAlbumIcon"
-            android:layout_marginStart="15dp"
-            android:textSize="15sp" />
 
         <ImageView
             android:layout_width="15dp"
