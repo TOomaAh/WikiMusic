@@ -15,17 +15,18 @@
         android:background="@drawable/tile_shape">
 
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/itemAlbumIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_margin="15dp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerInside"
             android:background="@drawable/album_icon_shape"
             android:src="@drawable/ic_placeholder_album"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="VectorDrawableCompat" />
+            tools:ignore="VectorDrawableCompat"
+            app:shapeAppearanceOverlay="@style/semiCircular"/>
 
         <TextView
             android:id="@+id/itemNameText"
