@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wikimusic.R
@@ -49,10 +50,7 @@ class SearchFragment : Fragment() {
                     event: KeyEvent?
                 ): Boolean {
                     view.recyclerArtistSearch.layoutManager = LinearLayoutManager(requireContext())
-                    view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(emptyList(), context!!);
-
-
-
+                    view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(emptyList(), context!!) {}
 
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                         if (v != null){
@@ -66,10 +64,15 @@ class SearchFragment : Fragment() {
                                         view.recyclerArtistSearch.layoutManager = LinearLayoutManager(requireContext())
                                         if (bodyArtist.artists != null){
                                             val artists: List<Artist> = responseArtist.body()!!.artists
-                                            view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(artists, context!!)
+                                            view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(artists, context!!) {
+                                                val action = SearchFragmentDirections.actionSearchFragmentToArtistFragment2(it)
+                                                findNavController().navigate(action)
+                                            }
                                         }else{
                                             view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(
-                                                emptyList(), context!!)
+                                                emptyList(), context!!) {
+
+                                            }
                                         }
                                     }
                                 }
@@ -79,10 +82,15 @@ class SearchFragment : Fragment() {
                                         view.recyclerRecordSearch.layoutManager = LinearLayoutManager(requireContext())
                                         if (bodyAlbum.album != null){
                                             val album: List<Album> = responseAlbum.body()!!.album
-                                            view.recyclerRecordSearch.adapter = ItemListAdapter<Artist>(album, context!!);
+                                            view.recyclerRecordSearch.adapter = ItemListAdapter<Album>(album, context!!) {
+                                                val action = SearchFragmentDirections.actionSearchFragmentToAlbumFragment(it)
+                                                findNavController().navigate(action)
+                                            }
                                             }else{
-                                            view.recyclerRecordSearch.adapter = ItemListAdapter<Artist>(
-                                                emptyList(), context!!);
+                                            view.recyclerRecordSearch.adapter = ItemListAdapter<Album>(
+                                                emptyList(), context!!) {
+
+                                            }
                                         }
                                     }
                                 }

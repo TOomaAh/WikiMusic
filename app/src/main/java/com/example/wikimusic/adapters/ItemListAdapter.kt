@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wikimusic.R
@@ -24,7 +24,7 @@ import org.w3c.dom.Text
 import java.lang.IllegalArgumentException
 import javax.security.auth.callback.Callback
 
-class ItemListAdapter<T>(private val items: List<Any>, private val context: Context) : RecyclerView.Adapter<BaseViewHolder<*>>() {
+class ItemListAdapter<T>(private val items: List<Any>, private val context: Context, private val listener: (T) -> Unit) : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     companion object {
         private const val TYPE_ALBUM = 0
@@ -53,11 +53,9 @@ class ItemListAdapter<T>(private val items: List<Any>, private val context: Cont
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         val element = items[position]
         when (holder) {
-            is AlbumViewHolder -> {
-                holder.bind(element as Album)
-            }
-            is ArtistViewHolder -> holder.bind(element as Artist)
-            is TrackViewHolder -> holder.bind(element as Track, position)
+            is AlbumViewHolder -> holder.bind(element as Album, listener as (Album) -> Unit)
+            is ArtistViewHolder -> holder.bind(element as Artist, listener as (Artist) -> Unit)
+            is TrackViewHolder -> holder.bind(element as Track, listener as (Track) -> Unit, position)
         }
     }
 
@@ -78,8 +76,8 @@ class ItemListAdapter<T>(private val items: List<Any>, private val context: Cont
 }
 
 abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(item: T)
-    abstract fun bind(item: T, position: Int)
+    abstract fun bind(item: T, listener: (T) -> Unit)
+    abstract fun bind(item: T, listener: (T) -> Unit,position: Int)
 }
 
 class AlbumViewHolder(v: View): BaseViewHolder<Album>(v){
@@ -89,18 +87,19 @@ class AlbumViewHolder(v: View): BaseViewHolder<Album>(v){
     private val artistName: TextView = v.artist_name_album
     private val view: View = v
 
-    override fun bind(item: Album) {
+    override fun bind(item: Album, listener: (Album) -> Unit) {
         albumName.text = item.strAlbum
         artistName.text = item.strArtist
         if (item.strAlbumThumb != null && item.strAlbumThumb.isNotEmpty()){
             Picasso.get().load(item.strAlbumThumb).into(thumbnail)
         }
         view.setOnClickListener{
+            listener(item)
         }
 
     }
 
-    override fun bind(item: Album, position: Int) {}
+    override fun bind(item: Album, listener: (Album) -> Unit, position: Int) {}
 }
 
 class ArtistViewHolder(v: View) : BaseViewHolder<Artist>(v){
@@ -109,7 +108,7 @@ class ArtistViewHolder(v: View) : BaseViewHolder<Artist>(v){
     private val view: View = v
 
 
-    override fun bind(item: Artist) {
+    override fun bind(item: Artist, listener: (Artist) -> Unit) {
         artistName.text = item.strArtist
         if (item.strArtistThumb != null && item.strArtistThumb.isNotEmpty()){
             Picasso.get().load(item.strArtistThumb)
@@ -117,14 +116,11 @@ class ArtistViewHolder(v: View) : BaseViewHolder<Artist>(v){
         }
 
         view.setOnClickListener{
-            val artist: Artist = item
-            val action = SearchFragmentDirections.actionSearchFragmentToArtistFragment2(artist)
-            //findNavController(SearchFragment()).navigate(action)
-
+            listener(item)
         }
     }
 
-    override fun bind(item: Artist, position: Int) {}
+    override fun bind(item: Artist, listener: (Artist) -> Unit, position: Int) {}
 }
 
 class TrackViewHolder(v: View) : BaseViewHolder<Track>(v){
@@ -132,9 +128,9 @@ class TrackViewHolder(v: View) : BaseViewHolder<Track>(v){
     private val trackName: TextView = v.song_title
     private val trackNumber: TextView = v.song_number
 
-    override fun bind(item: Track) {}
+    override fun bind(item: Track, listener: (Track) -> Unit) {}
 
-    override fun bind(item: Track, position: Int) {
+    override fun bind(item: Track, listener: (Track) -> kotlin.Unit, position: Int) {
         trackName.text = item.strTrack
         trackNumber.text = position.toString()
 
