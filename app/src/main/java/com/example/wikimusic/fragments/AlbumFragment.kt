@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wikimusic.R
+import com.example.wikimusic.services.ApiClient
 import kotlinx.android.synthetic.main.fragment_album.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AlbumFragment : Fragment() {
     override fun onCreateView(

@@ -8,10 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wikimusic.R
+import com.example.wikimusic.fragments.SearchFragment
 import com.example.wikimusic.models.Album
 import com.example.wikimusic.models.Artist
+import com.example.wikimusic.models.Track
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_artist.view.*
 import kotlinx.android.synthetic.main.item_album_cell.view.*
+import kotlinx.android.synthetic.main.item_track_cell_details.view.*
 import org.w3c.dom.Text
 import java.lang.IllegalArgumentException
 import javax.security.auth.callback.Callback
@@ -21,6 +25,7 @@ class ItemListAdapter<T>(private val items: List<Any>, private val context: Cont
     companion object {
         private const val TYPE_ALBUM = 0
         private const val TYPE_ARTIST = 1
+        private const val TYPE_TRACK = 2
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
@@ -33,6 +38,10 @@ class ItemListAdapter<T>(private val items: List<Any>, private val context: Cont
                 val view = LayoutInflater.from(context).inflate(R.layout.item_artist_cell, parent, false)
                 ArtistViewHolder(view)
             }
+            TYPE_TRACK -> {
+                val view = LayoutInflater.from(context).inflate(R.layout.item_track_cell_details, parent, false)
+                TrackViewHolder(view)
+            }
             else -> throw IllegalArgumentException("Invalid Argument")
         }
     }
@@ -40,8 +49,11 @@ class ItemListAdapter<T>(private val items: List<Any>, private val context: Cont
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         val element = items[position]
         when (holder) {
-            is AlbumViewHolder -> holder.bind(element as Album)
+            is AlbumViewHolder -> {
+                holder.bind(element as Album)
+            }
             is ArtistViewHolder -> holder.bind(element as Artist)
+            is TrackViewHolder -> holder.bind(element as Track, position)
         }
     }
 
@@ -54,6 +66,7 @@ class ItemListAdapter<T>(private val items: List<Any>, private val context: Cont
         return when (items[position]) {
             is Album -> TYPE_ALBUM
             is Artist -> TYPE_ARTIST
+            is Track -> TYPE_TRACK
             else -> throw IllegalArgumentException("Invalid type")
         }
     }
@@ -62,6 +75,7 @@ class ItemListAdapter<T>(private val items: List<Any>, private val context: Cont
 
 abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(item: T)
+    abstract fun bind(item: T, position: Int)
 }
 
 class AlbumViewHolder(v: View): BaseViewHolder<Album>(v){
@@ -69,26 +83,55 @@ class AlbumViewHolder(v: View): BaseViewHolder<Album>(v){
     private val thumbnail : ImageView = v.itemAlbumIcon
     private val albumName: TextView = v.itemNameText
     private val artistName: TextView = v.artist_name_album
+    private val view: View = v
 
     override fun bind(item: Album) {
         albumName.text = item.strAlbum
         artistName.text = item.strArtist
-
         if (item.strAlbumThumb != null && item.strAlbumThumb.isNotEmpty()){
             Picasso.get().load(item.strAlbumThumb).into(thumbnail)
         }
+        view.setOnClickListener{
+            val id: Artist = item.idArtist!!
+        }
 
     }
+
+    override fun bind(item: Album, position: Int) {}
 }
 
 class ArtistViewHolder(v: View) : BaseViewHolder<Artist>(v){
     private val thumbnail: ImageView = v.itemAlbumIcon
     private val artistName: TextView = v.itemNameText
+    private val view: View = v
+
 
     override fun bind(item: Artist) {
         artistName.text = item.strArtist
         if (item.strArtistThumb != null && item.strArtistThumb.isNotEmpty()){
-            Picasso.get().load(item.strArtistThumb).into(thumbnail)
+            Picasso.get().load(item.strArtistThumb)
+                .into(thumbnail)
+        }
+
+        view.setOnClickListener{
+            val artist: Artist = item
         }
     }
+
+    override fun bind(item: Artist, position: Int) {}
+}
+
+class TrackViewHolder(v: View) : BaseViewHolder<Track>(v){
+
+    private val trackName: TextView = v.song_title
+    private val trackNumber: TextView = v.song_number
+
+    override fun bind(item: Track) {}
+
+    override fun bind(item: Track, position: Int) {
+        trackName.text = item.strTrack
+        trackNumber.text = position.toString()
+
+    }
+
 }

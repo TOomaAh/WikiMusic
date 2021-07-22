@@ -1,7 +1,7 @@
 package com.example.wikimusic.models
 
 class Artist(val idArtist: String?,
-                val strArtist: String?,
+                val strArtist: String,
                 val strArtistStripped: String?,
                 val strArtistAlternate: String?,
                 val strLabel: String?,

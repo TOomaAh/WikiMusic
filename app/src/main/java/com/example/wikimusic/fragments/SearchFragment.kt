@@ -24,9 +24,6 @@ import kotlinx.coroutines.withContext
 
 class SearchFragment : Fragment() {
 
-    private var layoutManager: RecyclerView.LayoutManager? = null
-    private var adapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +31,10 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_search, container, false)
+    }
+
+    interface ArtistCellOnClickListener {
+        fun onArtistClicked(artist: Artist)
     }
 
 
@@ -47,6 +48,12 @@ class SearchFragment : Fragment() {
                     actionId: Int,
                     event: KeyEvent?
                 ): Boolean {
+                    view.recyclerArtistSearch.layoutManager = LinearLayoutManager(requireContext())
+                    view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(emptyList(), context!!);
+
+
+
+
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                         if (v != null){
                             GlobalScope.launch {
@@ -55,26 +62,28 @@ class SearchFragment : Fragment() {
                                 val bodyArtist = responseArtist.body()
                                 val bodyAlbum = responseAlbum.body()
                                 if (bodyArtist != null) {
-                                    if (bodyArtist.artists != null){
-                                        val artists: List<Artist> = responseArtist.body()!!.artists
-                                        withContext(Dispatchers.Main){
-                                            view.recyclerArtistSearch.layoutManager = LinearLayoutManager(requireContext())
-                                            view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(artists, context!!);
+                                    withContext(Dispatchers.Main){
+                                        view.recyclerArtistSearch.layoutManager = LinearLayoutManager(requireContext())
+                                        if (bodyArtist.artists != null){
+                                            val artists: List<Artist> = responseArtist.body()!!.artists
+                                            view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(artists, context!!)
+                                        }else{
+                                            view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(
+                                                emptyList(), context!!)
                                         }
-
-
                                     }
                                 }
 
                                 if (bodyAlbum != null) {
-                                    if (bodyAlbum.album != null){
-                                        val album: List<Album> = responseAlbum.body()!!.album
-                                        withContext(Dispatchers.Main){
-                                            view.recyclerRecordSearch.layoutManager = LinearLayoutManager(requireContext())
+                                    withContext(Dispatchers.Main){
+                                        view.recyclerRecordSearch.layoutManager = LinearLayoutManager(requireContext())
+                                        if (bodyAlbum.album != null){
+                                            val album: List<Album> = responseAlbum.body()!!.album
                                             view.recyclerRecordSearch.adapter = ItemListAdapter<Artist>(album, context!!);
+                                            }else{
+                                            view.recyclerRecordSearch.adapter = ItemListAdapter<Artist>(
+                                                emptyList(), context!!);
                                         }
-
-
                                     }
                                 }
 
