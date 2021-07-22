@@ -27,7 +27,12 @@ class ArtistFragment : Fragment() {
 //        view.subTextArtist = artistHome + artistStyle
 //        view.description_artist = artistDescription
         val recyclerRecordArtist : RecyclerView = view.recyclerRecordDetails
+        //cell Layout = R.id.item_album_cell.xml
+        //comme pour la liste recherche sauf : artist_name_album = année de sortie album
         val recyclerTracksArtist : RecyclerView = view.recyclerTracksDetails
+        //cell Layout = R.id.item_track_cell_details.xml
+        //cell.song_number = classement de la chanson
+        //cell.song_title = titre de la chanson
 
     }
 }
