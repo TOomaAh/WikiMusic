@@ -48,17 +48,17 @@ class AlbumFragment : Fragment() {
 
         GlobalScope.launch {
             withContext(Dispatchers.Main){
-                Picasso.get().load(album.strAlbumThumbBack).into(view.background_img)
+                Picasso.get().load(album.strAlbumThumb).into(view.background_img)
                 Picasso.get().load(album.strAlbumThumb).into(view.album_img)
                 view.artistTitle.text = album.strArtist
                 view.album_name.text = album.strAlbum
-                //view.description_artist.text = String.format("BonjourBonjour")
                 view.average_vote.text = album.intScore
-                view.vote_number.text = album.intScoreVotes
+                view.vote_number.text = String.format("%s votes", album.intScoreVotes)
                 view.description_album.text = if (album.strDescriptionFR != null && Locale.getDefault().displayLanguage == "fr_FR") album.strDescriptionFR else album.strDescriptionEN
             }
 
         }
+        //hide bottom bar
 
         val recyclerTracks : RecyclerView = view.recyclerTracksDetails //Cell Layout = R.layout.item_track_cell_details
     }

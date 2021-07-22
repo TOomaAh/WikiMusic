@@ -132,7 +132,7 @@ class TrackViewHolder(v: View) : BaseViewHolder<Track>(v){
 
     override fun bind(item: Track, listener: (Track) -> kotlin.Unit, position: Int) {
         trackName.text = item.strTrack
-        trackNumber.text = position.toString()
+        trackNumber.text = (position + 1).toString()
 
     }
 

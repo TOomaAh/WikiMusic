@@ -6,6 +6,6 @@
 
 
     <solid
-        android:color="@color/bottom_bar_text" />
+        android:color="@color/white" />
 
 </shape>

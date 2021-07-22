@@ -11,6 +11,7 @@ import com.example.wikimusic.R
 import com.example.wikimusic.adapters.ItemListAdapter
 import com.example.wikimusic.models.Album
 import com.example.wikimusic.models.Artist
+import com.example.wikimusic.models.Track
 import com.example.wikimusic.services.ApiClient
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_artist.view.*
@@ -61,10 +62,12 @@ class ArtistFragment : Fragment() {
                     val tracksBody = responseTracks.body()!!
                     if (tracksBody.track != null){
                         view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
-                        //view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext())
+                        view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext()){}
                     }
                 }
             }
         }
+
+        //hide bottom bar
     }
 }
