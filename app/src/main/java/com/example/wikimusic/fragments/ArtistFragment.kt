@@ -24,7 +24,7 @@ import java.util.*
 
 class ArtistFragment : Fragment() {
 
-    val artist: Artist = null
+    //val artist: Artist = Artist()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,41 +36,41 @@ class ArtistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        GlobalScope.launch {
-                    val responseAlbum = ApiClient.apiService.getAllalbumByArtist(artist.strArtist)
-                    val responseTracks = ApiClient.apiService.getTopTracks(artist.strArtist)
-                    withContext(Dispatchers.Main) {
-                        Picasso.get().load(artist.strArtistWideThumb).into(view.background_img)
-                        view.artistName.text = artist.strArtist
-                        view.subTextArtist.text = String.format("%s %s", artist.strCountry, artist.strGenre)
-
-
-
-                        view.description_artist.text =
-                            if (artist.strBiographyFR != null && Locale.getDefault().displayLanguage == "fr_FR") artist.strBiographyFR else artist.strBiographyEN
-
-                        if (responseAlbum.body() != null){
-                            val albumBody = responseAlbum.body()!!
-                            if (albumBody.album != null){
-                                view.recyclerRecordDetails.layoutManager = LinearLayoutManager(requireContext())
-                                view.recyclerRecordDetails.adapter = ItemListAdapter<Album>(albumBody.album, requireContext())
-                            }
-                        }
-
-                        if (responseTracks.body() != null){
-                            val tracksBody = responseTracks.body()!!
-                            if (tracksBody.track != null){
-                                view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
-                                view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext())
-                            }
-                        }
-                        //cell Layout = R.id.item_album_cell.xml
-                        //comme pour la liste recherche sauf : artist_name_album = année de sortie album
-
-                        //cell Layout = R.id.item_track_cell_details.xml
-                        //cell.song_number = classement de la chanson
-                        //cell.song_title = titre de la chanson
-            }
-        }
+//        GlobalScope.launch {
+//                    val responseAlbum = ApiClient.apiService.getAllalbumByArtist(artist.strArtist)
+//                    val responseTracks = ApiClient.apiService.getTopTracks(artist.strArtist)
+//                    withContext(Dispatchers.Main) {
+//                        Picasso.get().load(artist.strArtistWideThumb).into(view.background_img)
+//                        view.artistName.text = artist.strArtist
+//                        view.subTextArtist.text = String.format("%s %s", artist.strCountry, artist.strGenre)
+//
+//
+//
+//                        view.description_artist.text =
+//                            if (artist.strBiographyFR != null && Locale.getDefault().displayLanguage == "fr_FR") artist.strBiographyFR else artist.strBiographyEN
+//
+//                        if (responseAlbum.body() != null){
+//                            val albumBody = responseAlbum.body()!!
+//                            if (albumBody.album != null){
+//                                view.recyclerRecordDetails.layoutManager = LinearLayoutManager(requireContext())
+//                                view.recyclerRecordDetails.adapter = ItemListAdapter<Album>(albumBody.album, requireContext())
+//                            }
+//                        }
+//
+//                        if (responseTracks.body() != null){
+//                            val tracksBody = responseTracks.body()!!
+//                            if (tracksBody.track != null){
+//                                view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
+//                                view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext())
+//                            }
+//                        }
+//                        //cell Layout = R.id.item_album_cell.xml
+//                        //comme pour la liste recherche sauf : artist_name_album = année de sortie album
+//
+//                        //cell Layout = R.id.item_track_cell_details.xml
+//                        //cell.song_number = classement de la chanson
+//                        //cell.song_title = titre de la chanson
+//            }
+//        }
     }
 }

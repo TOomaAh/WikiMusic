@@ -6,9 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wikimusic.R
+import com.example.wikimusic.fragments.ArtistFragment
 import com.example.wikimusic.fragments.SearchFragment
+import com.example.wikimusic.fragments.SearchFragmentDirections
 import com.example.wikimusic.models.Album
 import com.example.wikimusic.models.Artist
 import com.example.wikimusic.models.Track
@@ -92,7 +96,6 @@ class AlbumViewHolder(v: View): BaseViewHolder<Album>(v){
             Picasso.get().load(item.strAlbumThumb).into(thumbnail)
         }
         view.setOnClickListener{
-            val id: Artist = item.idArtist!!
         }
 
     }
@@ -115,6 +118,9 @@ class ArtistViewHolder(v: View) : BaseViewHolder<Artist>(v){
 
         view.setOnClickListener{
             val artist: Artist = item
+            val action = SearchFragmentDirections.actionSearchFragmentToArtistFragment2(artist)
+            //findNavController(SearchFragment()).navigate(action)
+
         }
     }
 
