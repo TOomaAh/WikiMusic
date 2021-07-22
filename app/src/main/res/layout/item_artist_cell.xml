@@ -20,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
+            android:scaleType="fitCenter"
             android:background="@drawable/artist_icon_shape"
             android:src="@drawable/ic_placeholder_artiste"
             app:layout_constraintStart_toStartOf="parent"
