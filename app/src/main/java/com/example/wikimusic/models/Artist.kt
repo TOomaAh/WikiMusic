@@ -1,7 +1,12 @@
 package com.example.wikimusic.models
 
+import android.os.Parcel
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 class Artist(val idArtist: String?,
-                val strArtist: String?,
+                val strArtist: String,
                 val strArtistStripped: String?,
                 val strArtistAlternate: String?,
                 val strLabel: String?,
@@ -48,9 +53,4 @@ class Artist(val idArtist: String?,
                 val strLastFMChart: String?,
                 val intCharted: String?,
                 val strLocked: String?
-) {
-
-    override fun toString(): String {
-        return "$strArtist (${idArtist})"
-    }
-}
+) : Parcelable

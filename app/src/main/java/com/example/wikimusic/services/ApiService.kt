@@ -10,5 +10,7 @@ interface ApiService {
     @GET("trending.php?country=us&type=itunes") suspend fun rating(@Query("format") format: String) : Response<ResultTrending>;
     @GET("searchalbum.php") suspend fun searchAlbum(@Query("s") artist: String, @Query("a") album: String) : Response<ResultAlbum>;
     @GET("searchAlbum.php") suspend fun getAllAlbum(@Query("s") artist: String) : Response<ResultAlbum>;
-
+    @GET("searchalbum.php") suspend fun getAllalbumByArtist(@Query("s") artist: String) : Response<ResultAlbum>
+    @GET("artist.php") suspend fun getArtistInfo(@Query("i")artistId: String) : Response<ResultArtist>
+    @GET("track-top10.php") suspend fun getTopTracks(@Query("s") artistName: String) : Response<ResultTrack>
 }

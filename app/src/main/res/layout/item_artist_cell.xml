@@ -15,16 +15,19 @@
         android:background="@drawable/tile_shape">
 
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/itemAlbumIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_margin="15dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             android:background="@drawable/artist_icon_shape"
             android:src="@drawable/ic_placeholder_artiste"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="VectorDrawableCompat" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:ignore="VectorDrawableCompat"
+            app:shapeAppearanceOverlay="@style/Circular"/>
 
         <TextView
             android:id="@+id/itemNameText"
