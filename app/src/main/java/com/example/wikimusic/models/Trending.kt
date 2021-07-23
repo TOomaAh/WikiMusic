@@ -3,7 +3,7 @@ package com.example.wikimusic.models
 class Trending(
     val idTrending: String?,
     val intChartPlace: String?,
-    val idArtist: String?,
+    val idArtist: String,
     val idAlbum: String?,
     val idTrack: String?,
     val strArtistMBID: String?,

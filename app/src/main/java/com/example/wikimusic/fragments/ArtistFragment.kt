@@ -1,10 +1,17 @@
 package com.example.wikimusic.fragments
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commitNow
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,20 +25,16 @@ import com.example.wikimusic.models.Track
 import com.example.wikimusic.services.ApiClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_album.view.*
 import kotlinx.android.synthetic.main.fragment_artist.view.*
-import kotlinx.android.synthetic.main.fragment_artist.view.background_img
-import kotlinx.android.synthetic.main.fragment_artist.view.recyclerTracksDetails
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.*
 
 class ArtistFragment : Fragment() {
 
     val args: ArtistFragmentArgs by navArgs()
+
     lateinit var artist: Artist
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,86 +45,37 @@ class ArtistFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_artist, container, false)
     }
 
+    @DelicateCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         view.backButton.setOnClickListener {
-            findNavController().popBackStack()
+            it.findNavController().popBackStack()
         }
 
-        GlobalScope.launch {
-            artist = args.artist
-            val responseAlbum = ApiClient.apiService.getAllalbumByArtist(artist.strArtist)
-            val responseTracks = ApiClient.apiService.getTopTracks(artist.strArtist)
-            withContext(Dispatchers.Main) {
-                Picasso.get().load(artist.strArtistWideThumb).into(view.background_img)
-                view.artistName.text = artist.strArtist
-                view.subTextArtist.text = String.format("%s %s", artist.strCountry, artist.strGenre)
-
-                val db = Room.databaseBuilder(
-                    requireContext(),
-                    FavorisRoomDb::class.java, "favoris"
-                ).allowMainThreadQueries().build()
-                val favsDao = db.favDao()
-
-                val favList: List<Artist> = favsDao.getArtistsFav()
-                for (i in favList.indices){
-                    if (artist.idArtist!!.equals(favList.get(i).idArtist)){
-                        view.add_to_fav.visibility = View.GONE
-                        view.favicon.visibility = View.VISIBLE
-                    }
-                }
-
-                view.description_artist.text =
-                    if (artist.strBiographyFR != null && Locale.getDefault().displayLanguage == "fr_FR") artist.strBiographyFR else artist.strBiographyEN
-
-                if (responseAlbum.body() != null){
-                    val albumBody  = responseAlbum.body()!!
-                    if (albumBody.album != null){
-                        val tabAlbum : List<Album> = albumBody.album
-                        tabAlbum.map {
-                            it.strArtist = it.intYearReleased
-                        }
-                        view.recordTextSearch.text = String.format("%s (%s)", getString(R.string.album), tabAlbum.count())
-                        view.recyclerRecordDetails.layoutManager = LinearLayoutManager(requireContext())
-                        view.recyclerRecordDetails.adapter = ItemListAdapter<Album>(albumBody.album, requireContext()) {
-                            val action = ArtistFragmentDirections.actionArtistFragmentToAlbumFragment(it)
-                            findNavController().navigate(action)
-                        }
-                    }
-                }
-
-                if (responseTracks.body() != null){
-                    val tracksBody = responseTracks.body()!!
-                    if (tracksBody.track != null){
-                        view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
-                        view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext()){
-                            val action = ArtistFragmentDirections.actionArtistFragmentToSongFragment(it)
-                            findNavController().navigate(action)
-                        }
-                    }
-                }
-            }
-        }
+        artist = args.artist
+        fetchArtistByArtist(view, artist)
 
         view.add_to_fav.setOnClickListener{
             val db = Room.databaseBuilder(
-            requireContext(),
-            FavorisRoomDb::class.java, "favoris"
-        ).allowMainThreadQueries().build()
-        val favsDao = db.favDao()
-        favsDao.insertArtist(
-            Artist(null,artist.idArtist,
-            artist.strArtist,
-            artist.strArtistAlternate,
-            artist.strGenre,
-            artist.strBiographyEN,
-            artist.strBiographyFR,
-            artist.strCountry,
-            artist.strArtistThumb,
-            artist.strArtistWideThumb)
-        )
-        view.favicon.visibility = View.VISIBLE
-        view.add_to_fav.visibility = View.INVISIBLE
+                requireContext(),
+                FavorisRoomDb::class.java, "favoris"
+            ).allowMainThreadQueries().build()
+            val favsDao = db.favDao()
+            favsDao.insertArtist(
+                Artist(null,artist.idArtist,
+                    artist.strArtist,
+                    artist.strArtistAlternate,
+                    artist.strGenre,
+                    artist.strBiographyEN,
+                    artist.strBiographyFR,
+                    artist.strCountry,
+                    artist.strArtistFanart2,
+                    artist.strArtistThumb,
+                    artist.strArtistWideThumb)
+            )
+            view.favicon.visibility = View.VISIBLE
+            view.add_to_fav.visibility = View.INVISIBLE
         }
 
         view.favicon.setOnClickListener{
@@ -140,4 +94,68 @@ class ArtistFragment : Fragment() {
 
         //hide bottom bar
     }
+
+
+    @DelicateCoroutinesApi
+    private fun fetchArtistByArtist(view: View, artist: Artist){
+        GlobalScope.launch {
+            val responseAlbum = ApiClient.apiService.getAllalbumByArtist(artist.strArtist)
+            val responseTracks = ApiClient.apiService.getTopTracks(artist.strArtist)
+            withContext(Dispatchers.Main) {
+
+                if (!artist.strArtistFanart2.isNullOrEmpty()){
+                    Picasso.get().load(artist.strArtistFanart2).into(view.background_img)
+                }else{
+                    Picasso.get().load(artist.strArtistWideThumb).into(view.background_img)
+                }
+
+                view.artistName.text = artist.strArtist
+                view.subTextArtist.text = String.format("%s %s", artist.strCountry, artist.strGenre)
+
+                val db = Room.databaseBuilder(
+                    requireContext(),
+                    FavorisRoomDb::class.java, "favoris"
+                ).allowMainThreadQueries().build()
+                val favsDao = db.favDao()
+
+                val favList: List<Artist> = favsDao.getArtistsFav()
+                for (i in favList.indices){
+                    if (artist.idArtist!!.equals(favList.get(i).idArtist)){
+                        view.add_to_fav.visibility = View.INVISIBLE
+                        view.favicon.visibility = View.VISIBLE
+                    }
+                }
+
+                view.description_artist.text =
+                    if (artist.strBiographyFR != null && Locale.getDefault().displayLanguage == "français") artist.strBiographyFR else artist.strBiographyEN
+                view.description_artist.movementMethod = ScrollingMovementMethod()
+                if (responseAlbum.body() != null){
+                    val albumBody  = responseAlbum.body()!!
+                    if (albumBody.album != null){
+                        val tabAlbum : List<Album> = albumBody.album
+                        view.recordTextSearch.text = String.format("%s (%s)", getString(R.string.album), tabAlbum.count())
+                        view.recyclerRecordDetails.layoutManager = LinearLayoutManager(requireContext())
+                        view.recyclerRecordDetails.adapter = ItemListAdapter<Album>(albumBody.album, requireContext(), isArtistView = true) {
+                            val action = ArtistFragmentDirections.actionArtistFragmentToAlbumFragment(it)
+                            findNavController().navigate(action)
+                        }
+                    }
+                }
+
+                if (responseTracks.body() != null){
+                    val tracksBody = responseTracks.body()!!
+                    if (tracksBody.track != null){
+                        view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
+                        view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext()){
+                            //val action = ArtistFragmentDirections.actionArtistFragmentToSongFragment(it)
+                            //findNavController().navigate(action)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
 }

@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 class Track(
     val idTrack: String?,
     val idAlbum: String?,
-    val idArtist: String?,
+    val idArtist: String,
     val idLyric: String?,
     val idIMVDB: String?,
     val strTrack: String?,

@@ -62,7 +62,7 @@ class AlbumFragment : Fragment() {
         val favList: List<Album> = favsDao.getAlbum()
         for (i in favList.indices){
             if (album.idAlbum!!.equals(favList.get(i).idAlbum)){
-                view.icone_fav.visibility = View.GONE
+                view.icone_fav.visibility = View.INVISIBLE
                 view.icone_fav_liked.visibility = View.VISIBLE
             }
         }
@@ -80,6 +80,7 @@ class AlbumFragment : Fragment() {
                             view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracks, requireContext()){
                                 val action = AlbumFragmentDirections.actionAlbumFragmentToSongFragment(it)
                                 findNavController().navigate(action)
+
                             }
                         }
                     }
@@ -90,7 +91,7 @@ class AlbumFragment : Fragment() {
                 view.album_name.text = album.strAlbum
                 view.average_vote.text = album.intScore
                 view.vote_number.text = String.format("%s votes", album.intScoreVotes)
-                view.description_album.text = if (album.strDescriptionFR != null && Locale.getDefault().displayLanguage == "fr_FR") album.strDescriptionFR else album.strDescriptionEN
+                view.description_album.text = if (album.strDescriptionFR != null && Locale.getDefault().displayLanguage == "français") album.strDescriptionFR else album.strDescriptionEN
             }
 
         }

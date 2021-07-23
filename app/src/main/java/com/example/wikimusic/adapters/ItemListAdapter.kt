@@ -29,7 +29,11 @@ import org.w3c.dom.Text
 import java.lang.IllegalArgumentException
 import javax.security.auth.callback.Callback
 
-class ItemListAdapter<T>(private val items: List<Any>, private val context: Context, private val listener: (T) -> Unit) : RecyclerView.Adapter<BaseViewHolder<*>>() {
+class ItemListAdapter<T>(private val items: List<Any>, private val context: Context, isArtistView: Boolean = false, private val listener: (T) -> Unit) : RecyclerView.Adapter<BaseViewHolder<*>>() {
+
+
+    private val isArtistView: Boolean = isArtistView
+
 
     companion object {
         private const val TYPE_ALBUM = 0
@@ -63,7 +67,7 @@ class ItemListAdapter<T>(private val items: List<Any>, private val context: Cont
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         val element = items[position]
         when (holder) {
-            is AlbumViewHolder -> holder.bind(element as Album, listener as (Album) -> Unit)
+            is AlbumViewHolder -> holder.bind(element as Album, listener as (Album) -> Unit, isArtistView)
             is ArtistViewHolder -> holder.bind(element as Artist, listener as (Artist) -> Unit)
             is TrackViewHolder -> holder.bind(element as Track, listener as (Track) -> Unit, position)
             is TrendingViewHolder -> holder.bind(element as Trending, listener as (Trending) -> Unit, position)
@@ -88,8 +92,8 @@ class ItemListAdapter<T>(private val items: List<Any>, private val context: Cont
 }
 
 abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(item: T, listener: (T) -> Unit)
-    abstract fun bind(item: T, listener: (T) -> Unit,position: Int)
+    abstract fun bind(item: T, listener: (T) -> Unit, isArtistView: Boolean = false)
+    abstract fun bind(item: T, listener: (T) -> Unit, position: Int)
 }
 
 class AlbumViewHolder(v: View): BaseViewHolder<Album>(v){
@@ -99,19 +103,21 @@ class AlbumViewHolder(v: View): BaseViewHolder<Album>(v){
     private val artistName: TextView = v.artist_name_album
     private val view: View = v
 
-    override fun bind(item: Album, listener: (Album) -> Unit) {
+    override fun bind(item: Album, listener: (Album) -> Unit, position: Int) {}
+    override fun bind(item: Album, listener: (Album) -> Unit, isArtistView: Boolean) {
         albumName.text = item.strAlbum
         artistName.text = item.strArtist
+        if (isArtistView){
+            artistName.text = item.intYearReleased
+        }
+
         if (item.strAlbumThumb != null && item.strAlbumThumb.isNotEmpty()){
             Picasso.get().load(item.strAlbumThumb).into(thumbnail)
         }
         view.setOnClickListener{
             listener(item)
         }
-
     }
-
-    override fun bind(item: Album, listener: (Album) -> Unit, position: Int) {}
 }
 
 class ArtistViewHolder(v: View) : BaseViewHolder<Artist>(v){
@@ -120,7 +126,7 @@ class ArtistViewHolder(v: View) : BaseViewHolder<Artist>(v){
     private val view: View = v
 
 
-    override fun bind(item: Artist, listener: (Artist) -> Unit) {
+    override fun bind(item: Artist, listener: (Artist) -> Unit, isArtistView: Boolean) {
         artistName.text = item.strArtist
         if (item.strArtistThumb != null && item.strArtistThumb.isNotEmpty()){
             Picasso.get().load(item.strArtistThumb)
@@ -141,7 +147,7 @@ class TrackViewHolder(v: View) : BaseViewHolder<Track>(v){
     private val trackNumber: TextView = v.song_number
     private val view: View = v
 
-    override fun bind(item: Track, listener: (Track) -> Unit) {}
+    override fun bind(item: Track, listener: (Track) -> Unit, isArtistView: Boolean) {}
 
     override fun bind(item: Track, listener: (Track) -> kotlin.Unit, position: Int) {
         trackName.text = item.strTrack
@@ -160,8 +166,9 @@ class TrendingViewHolder(v: View) : BaseViewHolder<Trending>(v){
     private val trackNumber: TextView = v.song_number
     private val trackArtist: TextView = v.song_artist
     private val thumbnail: ImageView = v.album_img_chart_track
+    private val view: View = v
 
-    override fun bind(item: Trending, listener: (Trending) -> Unit) {}
+    override fun bind(item: Trending, listener: (Trending) -> Unit, isArtistView: Boolean) {}
 
     override fun bind(item: Trending, listener: (Trending) -> kotlin.Unit, position: Int) {
         if (item.idTrack.isNullOrEmpty()){
@@ -176,6 +183,9 @@ class TrendingViewHolder(v: View) : BaseViewHolder<Trending>(v){
             if (item.strTrackThumb != null && item.strTrackThumb.isNotEmpty()){
                 Picasso.get().load(item.strTrackThumb).into(thumbnail)
             }
+        }
+        view.setOnClickListener {
+            listener(item)
         }
         trackArtist.text = item.strArtist
         trackNumber.text = (position + 1).toString()

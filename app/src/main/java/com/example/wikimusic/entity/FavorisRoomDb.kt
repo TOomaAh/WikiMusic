@@ -4,14 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.wikimusic.models.Album
 import com.example.wikimusic.models.Artist
 
+
 // Annotates class to be a Room Database with a table (entity) of the Word class
-@Database(entities = arrayOf(Artist::class, Album::class), version = 4, exportSchema = false)
+@Database(entities = arrayOf(Artist::class, Album::class), version = 5, exportSchema = false)
 public abstract class FavorisRoomDb : RoomDatabase() {
 
     abstract fun favDao(): FavorisDao
+
+
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

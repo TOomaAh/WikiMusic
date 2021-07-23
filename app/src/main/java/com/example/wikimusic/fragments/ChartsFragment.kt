@@ -30,7 +30,7 @@ class ChartsFragment : Fragment () {
         //tabLayout.setTabGravity(TabLayout.GRAVITY_FILL)
 
         val chartAdapter = ChartFragmentAdapter(
-            parentFragmentManager,
+            childFragmentManager,
             lifecycle, context, tabLayout.getTabCount()
         )
         viewPager.setAdapter(chartAdapter)
