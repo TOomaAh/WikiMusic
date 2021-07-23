@@ -13,4 +13,5 @@ interface ApiService {
     @GET("searchalbum.php") suspend fun getAllalbumByArtist(@Query("s") artist: String) : Response<ResultAlbum>
     @GET("artist.php") suspend fun getArtistInfo(@Query("i")artistId: String) : Response<ResultArtist>
     @GET("track-top10.php") suspend fun getTopTracks(@Query("s") artistName: String) : Response<ResultTrack>
+    @GET("track.php") suspend fun getTracksByAlbum(@Query("m") albumId: String) : Response<ResultTrack>
 }

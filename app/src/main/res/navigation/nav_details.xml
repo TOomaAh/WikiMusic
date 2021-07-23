@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/chartsFragment"
         android:name="com.example.wikimusic.fragments.ChartsFragment"
-        android:label="ChartsFragment" />
+        android:label="ChartsFragment" >
+        <action
+            android:id="@+id/action_chartsFragment_to_artistFragment"
+            app:destination="@id/artistFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.wikimusic.fragments.SearchFragment"
@@ -15,11 +19,21 @@
         <action
             android:id="@+id/action_searchFragment_to_artistFragment2"
             app:destination="@id/artistFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.wikimusic.fragments.FavoritesFragment"
-        android:label="FavoritesFragment" />
+        android:label="FavoritesFragment" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_artistFragment"
+            app:destination="@id/artistFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+    </fragment>
     <fragment
         android:id="@+id/artistFragment"
         android:name="com.example.wikimusic.fragments.ArtistFragment"
@@ -27,5 +41,16 @@
         <argument
             android:name="artist"
             app:argType="com.example.wikimusic.models.Artist" />
+        <action
+            android:id="@+id/action_artistFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumFragment"
+        android:name="com.example.wikimusic.fragments.AlbumFragment"
+        android:label="AlbumFragment" >
+        <argument
+            android:name="album"
+            app:argType="com.example.wikimusic.models.Album" />
     </fragment>
 </navigation>

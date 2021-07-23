@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginBottom="10dp"
-    android:background="@drawable/track_tile_shape"
     app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,20 +19,29 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
+            android:textColor="@color/black"
             android:layout_height="match_parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <TextView
-            android:id="@+id/song_title"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:layout_marginStart="10dp"
-            android:text="Walk on Water feat. Beyoncé"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:layout_constraintLeft_toRightOf="@id/song_number"
-            app:layout_constraintTop_toTopOf="parent"/>
+
+
+            <TextView
+                android:id="@+id/song_title"
+                android:background="@drawable/track_tile_shape"
+                android:textColor="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="13dp"
+                android:textSize="18sp"
+                android:text="Walk on Water feat. Beyoncé"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toRightOf="@id/song_number"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+
+
 
 
 
