@@ -98,6 +98,13 @@ class ArtistFragment : Fragment() {
 
     @DelicateCoroutinesApi
     private fun fetchArtistByArtist(view: View, artist: Artist){
+
+        view.recordTextSearch.visibility = View.INVISIBLE
+        view.border_3.visibility = View.INVISIBLE
+
+        view.likeTracksText.visibility = View.INVISIBLE
+        view.border_4.visibility = View.INVISIBLE
+
         GlobalScope.launch {
             val responseAlbum = ApiClient.apiService.getAllalbumByArtist(artist.strArtist)
             val responseTracks = ApiClient.apiService.getTopTracks(artist.strArtist)
@@ -131,7 +138,9 @@ class ArtistFragment : Fragment() {
                 view.description_artist.movementMethod = ScrollingMovementMethod()
                 if (responseAlbum.body() != null){
                     val albumBody  = responseAlbum.body()!!
-                    if (albumBody.album != null){
+                    if (!albumBody.album.isNullOrEmpty()){
+                        view.recordTextSearch.visibility = View.VISIBLE
+                        view.border_3.visibility = View.VISIBLE
                         val tabAlbum : List<Album> = albumBody.album
                         view.recordTextSearch.text = String.format("%s (%s)", getString(R.string.album), tabAlbum.count())
                         view.recyclerRecordDetails.layoutManager = LinearLayoutManager(requireContext())
@@ -139,17 +148,25 @@ class ArtistFragment : Fragment() {
                             val action = ArtistFragmentDirections.actionArtistFragmentToAlbumFragment(it)
                             findNavController().navigate(action)
                         }
+                    }else{
+                        view.recordTextSearch.visibility = View.INVISIBLE
+                        view.border_3.visibility = View.INVISIBLE
                     }
                 }
 
                 if (responseTracks.body() != null){
                     val tracksBody = responseTracks.body()!!
-                    if (tracksBody.track != null){
+                    if (!tracksBody.track.isNullOrEmpty()){
+                        view.likeTracksText.visibility = View.VISIBLE
+                        view.border_4.visibility = View.VISIBLE
                         view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
                         view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext()){
-                            //val action = ArtistFragmentDirections.actionArtistFragmentToSongFragment(it)
-                            //findNavController().navigate(action)
+                            val action = ArtistFragmentDirections.actionArtistFragmentToSongFragment(it)
+                            findNavController().navigate(action)
                         }
+                    }else{
+                        view.likeTracksText.visibility = View.INVISIBLE
+                        view.border_4.visibility = View.INVISIBLE
                     }
                 }
             }
