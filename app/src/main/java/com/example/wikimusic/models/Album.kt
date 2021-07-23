@@ -10,7 +10,7 @@ class Album(
     val idLabel: String?,
     val strAlbum: String?,
     val strAlbumStripped: String?,
-    val strArtist: String?,
+    var strArtist: String?,
     val strArtistStripped: String?,
     val intYearReleased: String?,
     val strStyle: String?,
