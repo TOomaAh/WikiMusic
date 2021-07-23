@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import com.example.wikimusic.models.Album
 import com.example.wikimusic.models.Artist
 import com.example.wikimusic.models.Track
 import com.example.wikimusic.services.ApiClient
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_artist.view.*
 import kotlinx.coroutines.Dispatchers
@@ -31,11 +34,18 @@ class ArtistFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val navbar: BottomNavigationView = requireActivity().findViewById(R.id.home_bottom_nav)
+        navbar.visibility = View.GONE
         return inflater.inflate(R.layout.fragment_artist, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        view.backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         GlobalScope.launch {
             val artist: Artist = args.artist
             val responseAlbum = ApiClient.apiService.getAllalbumByArtist(artist.strArtist)
@@ -51,8 +61,10 @@ class ArtistFragment : Fragment() {
                     if (artist.strBiographyFR != null && Locale.getDefault().displayLanguage == "fr_FR") artist.strBiographyFR else artist.strBiographyEN
 
                 if (responseAlbum.body() != null){
-                    val albumBody = responseAlbum.body()!!
+                    val albumBody  = responseAlbum.body()!!
                     if (albumBody.album != null){
+                        val tabAlbum : List<Album> = albumBody.album
+                        view.recordTextSearch.text = String.format("%s (%s)", getString(R.string.album), tabAlbum.count())
                         view.recyclerRecordDetails.layoutManager = LinearLayoutManager(requireContext())
                         view.recyclerRecordDetails.adapter = ItemListAdapter<Album>(albumBody.album, requireContext()) {
                             val action = ArtistFragmentDirections.actionArtistFragmentToAlbumFragment(it)
@@ -70,6 +82,7 @@ class ArtistFragment : Fragment() {
                 }
             }
         }
+
 
         //hide bottom bar
     }

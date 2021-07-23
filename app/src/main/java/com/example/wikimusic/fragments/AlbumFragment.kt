@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.example.wikimusic.adapters.ItemListAdapter
 import com.example.wikimusic.models.Album
 import com.example.wikimusic.models.Track
 import com.example.wikimusic.services.ApiClient
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_album.*
 import kotlinx.android.synthetic.main.fragment_album.view.*
@@ -34,11 +36,18 @@ class AlbumFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val navbar: BottomNavigationView = requireActivity().findViewById(R.id.home_bottom_nav)
+        navbar.visibility = View.GONE
         return inflater.inflate(R.layout.fragment_album, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        view.left_arrow.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         val album: Album = args.album
 
         GlobalScope.launch {
@@ -50,6 +59,7 @@ class AlbumFragment : Fragment() {
                         view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
                         if (bodyTracks.track != null){
                             val tracks: List<Track> = responseTracks.body()!!.track
+                            view.subTextAlbum.text = String.format("%s %s", tracks.count(), getString(R.string.songs))
                             view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracks, requireContext()){
 
                             }
@@ -67,7 +77,5 @@ class AlbumFragment : Fragment() {
 
         }
         //hide bottom bar
-
-        val recyclerTracks : RecyclerView = view.recyclerTracksDetails //Cell Layout = R.layout.item_track_cell_details
     }
 }
