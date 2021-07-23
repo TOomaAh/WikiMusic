@@ -1,5 +1,9 @@
 package com.example.wikimusic.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 class Track(
     val idTrack: String?,
     val idAlbum: String?,
@@ -55,5 +59,4 @@ class Track(
     val strMusicBrainzAlbumID: String?,
     val strMusicBrainzArtistID: String?,
     val strLocked: String?
-) {
-}
+) : Parcelable
