@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_artistFragment_to_albumFragment"
             app:destination="@id/albumFragment" />
+        <action
+            android:id="@+id/action_artistFragment_to_songFragment"
+            app:destination="@id/songFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumFragment"
@@ -52,5 +55,16 @@
         <argument
             android:name="album"
             app:argType="com.example.wikimusic.models.Album" />
+        <action
+            android:id="@+id/action_albumFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/songFragment"
+        android:name="com.example.wikimusic.fragments.SongFragment"
+        android:label="SongFragment" >
+        <argument
+            android:name="track"
+            app:argType="com.example.wikimusic.models.Track" />
     </fragment>
 </navigation>

@@ -77,7 +77,10 @@ class ArtistFragment : Fragment() {
                     val tracksBody = responseTracks.body()!!
                     if (tracksBody.track != null){
                         view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
-                        view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext()){}
+                        view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext()){
+                            val action = ArtistFragmentDirections.actionArtistFragmentToSongFragment(it)
+                            findNavController().navigate(action)
+                        }
                     }
                 }
             }
