@@ -9,9 +9,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.example.wikimusic.R
 import com.example.wikimusic.adapters.ItemListAdapter
+import com.example.wikimusic.entity.FavorisRoomDb
 import com.example.wikimusic.models.Album
+import com.example.wikimusic.models.Artist
 import com.example.wikimusic.models.Track
 import com.example.wikimusic.services.ApiClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -50,6 +53,20 @@ class AlbumFragment : Fragment() {
 
         val album: Album = args.album
 
+        val db = Room.databaseBuilder(
+            requireContext(),
+            FavorisRoomDb::class.java, "favoris"
+        ).allowMainThreadQueries().build()
+        val favsDao = db.favDao()
+
+        val favList: List<Album> = favsDao.getAlbum()
+        for (i in favList.indices){
+            if (album.idAlbum!!.equals(favList.get(i).idAlbum)){
+                view.icone_fav.visibility = View.GONE
+                view.icone_fav_liked.visibility = View.VISIBLE
+            }
+        }
+
         GlobalScope.launch {
             withContext(Dispatchers.Main){
                 val responseTracks = ApiClient.apiService.getTracksByAlbum(album.idAlbum.toString())
@@ -74,6 +91,41 @@ class AlbumFragment : Fragment() {
                 view.vote_number.text = String.format("%s votes", album.intScoreVotes)
                 view.description_album.text = if (album.strDescriptionFR != null && Locale.getDefault().displayLanguage == "fr_FR") album.strDescriptionFR else album.strDescriptionEN
             }
+
+        }
+
+        view.icone_fav.setOnClickListener{
+            val db = Room.databaseBuilder(
+                requireContext(),
+                FavorisRoomDb::class.java, "favoris"
+            ).allowMainThreadQueries().build()
+            val favsDao = db.favDao()
+            favsDao.insertAlbum(
+                Album(null,album.idAlbum,
+                    album.strAlbum,
+                    album.strArtist,
+                    album.intYearReleased,
+                    album.strAlbumThumb,
+                    album.strDescriptionEN,
+                    album.strDescriptionFR,
+                    album.intScore,
+                    album.intScoreVotes)
+            )
+            view.icone_fav_liked.visibility = View.VISIBLE
+            view.icone_fav.visibility = View.INVISIBLE
+        }
+
+        view.icone_fav_liked.setOnClickListener{
+            val db = Room.databaseBuilder(
+                requireContext(),
+                FavorisRoomDb::class.java, "favoris"
+            ).allowMainThreadQueries().build()
+            val favsDao = db.favDao()
+            favsDao.deleteAlbumFav(
+                album.idAlbum!!
+            )
+            view.icone_fav_liked.visibility = View.INVISIBLE
+            view.icone_fav.visibility = View.VISIBLE
 
         }
         //hide bottom bar

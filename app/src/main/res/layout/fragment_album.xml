@@ -72,6 +72,17 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
+                <ImageView
+                    android:id="@+id/icone_fav_liked"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="20dp"
+                    android:visibility="invisible"
+                    android:src="@drawable/ic_like_on"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
