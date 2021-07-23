@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wikimusic.R
+import com.example.wikimusic.adapters.ItemListAdapter
 import com.example.wikimusic.models.Album
+import com.example.wikimusic.models.Track
 import com.example.wikimusic.services.ApiClient
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_album.*
@@ -36,18 +39,23 @@ class AlbumFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        view.background_img = album_img_big
-//        view.artistTitle = artist_name
-//        view.album_img = album_img_small
-//        view.album_name = album_name
-//        view.subTextAlbum = album_song_number_total + "@String/tracks"
-//        view.average_vote = album_average_vote
-//        view.vote_number = album_nbre_vite_total
-//        view.description_album = album_description
         val album: Album = args.album
 
         GlobalScope.launch {
             withContext(Dispatchers.Main){
+                val responseTracks = ApiClient.apiService.getTracksByAlbum(album.idAlbum.toString())
+                val bodyTracks = responseTracks.body()
+                if (bodyTracks != null) {
+                    withContext(Dispatchers.Main){
+                        view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
+                        if (bodyTracks.track != null){
+                            val tracks: List<Track> = responseTracks.body()!!.track
+                            view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracks, requireContext()){
+
+                            }
+                        }
+                    }
+                }
                 Picasso.get().load(album.strAlbumThumb).into(view.background_img)
                 Picasso.get().load(album.strAlbumThumb).into(view.album_img)
                 view.artistTitle.text = album.strArtist
