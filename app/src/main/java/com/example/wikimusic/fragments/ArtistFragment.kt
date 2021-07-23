@@ -78,6 +78,9 @@ class ArtistFragment : Fragment() {
                     val albumBody  = responseAlbum.body()!!
                     if (albumBody.album != null){
                         val tabAlbum : List<Album> = albumBody.album
+                        tabAlbum.map {
+                            it.strArtist = it.intYearReleased
+                        }
                         view.recordTextSearch.text = String.format("%s (%s)", getString(R.string.album), tabAlbum.count())
                         view.recyclerRecordDetails.layoutManager = LinearLayoutManager(requireContext())
                         view.recyclerRecordDetails.adapter = ItemListAdapter<Album>(albumBody.album, requireContext()) {
@@ -91,7 +94,10 @@ class ArtistFragment : Fragment() {
                     val tracksBody = responseTracks.body()!!
                     if (tracksBody.track != null){
                         view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
-                        view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext()){}
+                        view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracksBody.track, requireContext()){
+                            val action = ArtistFragmentDirections.actionArtistFragmentToSongFragment(it)
+                            findNavController().navigate(action)
+                        }
                     }
                 }
             }

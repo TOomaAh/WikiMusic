@@ -78,7 +78,8 @@ class AlbumFragment : Fragment() {
                             val tracks: List<Track> = responseTracks.body()!!.track
                             view.subTextAlbum.text = String.format("%s %s", tracks.count(), getString(R.string.songs))
                             view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracks, requireContext()){
-
+                                val action = AlbumFragmentDirections.actionAlbumFragmentToSongFragment(it)
+                                findNavController().navigate(action)
                             }
                         }
                     }

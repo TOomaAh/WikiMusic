@@ -139,14 +139,18 @@ class TrackViewHolder(v: View) : BaseViewHolder<Track>(v){
 
     private val trackName: TextView = v.song_title
     private val trackNumber: TextView = v.song_number
+    private val view: View = v
 
     override fun bind(item: Track, listener: (Track) -> Unit) {}
 
     override fun bind(item: Track, listener: (Track) -> kotlin.Unit, position: Int) {
         trackName.text = item.strTrack
         trackNumber.text = (position + 1).toString()
-
+        view.setOnClickListener{
+            listener(item)
+        }
     }
+
 
 }
 
