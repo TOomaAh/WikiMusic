@@ -59,6 +59,7 @@ class AlbumFragment : Fragment() {
                         view.recyclerTracksDetails.layoutManager = LinearLayoutManager(requireContext())
                         if (bodyTracks.track != null){
                             val tracks: List<Track> = responseTracks.body()!!.track
+                            view.subTextAlbum.text = String.format("%s %s", tracks.count(), getString(R.string.songs))
                             view.recyclerTracksDetails.adapter = ItemListAdapter<Track>(tracks, requireContext()){
 
                             }
@@ -76,7 +77,5 @@ class AlbumFragment : Fragment() {
 
         }
         //hide bottom bar
-
-        val recyclerTracks : RecyclerView = view.recyclerTracksDetails //Cell Layout = R.layout.item_track_cell_details
     }
 }
