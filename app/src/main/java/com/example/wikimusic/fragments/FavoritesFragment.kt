@@ -46,8 +46,7 @@ class FavoritesFragment : Fragment() {
             val favListAlbum: List<Album> = favsDao.getAlbum()
 
 
-
-            if (favListArtist != null) {
+            if (!favListArtist.isNullOrEmpty()) {
                 withContext(Dispatchers.Main){
                     view.recyclerArtistFav.layoutManager = LinearLayoutManager(requireContext())
                     if (favListArtist != null){
@@ -63,9 +62,12 @@ class FavoritesFragment : Fragment() {
                         }
                     }
                 }
+            }else {
+                view.artistTextFavorites.visibility = View.INVISIBLE
+                view.border_2_fav.visibility = View.INVISIBLE
             }
 
-            if (favListAlbum != null) {
+            if (!favListAlbum.isNullOrEmpty()) {
                 withContext(Dispatchers.Main){
                     view.recyclerRecordFav.layoutManager = LinearLayoutManager(requireContext())
                     if (favListAlbum != null){
@@ -81,6 +83,9 @@ class FavoritesFragment : Fragment() {
                         }
                     }
                 }
+            }else{
+                view.recordTextFavorites.visibility = View.INVISIBLE
+                view.border_3_fav.visibility = View.INVISIBLE
             }
 
         }

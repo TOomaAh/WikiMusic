@@ -46,8 +46,16 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.artistTextSearch.visibility = View.INVISIBLE
+        view.border_2.visibility = View.INVISIBLE
+        view.recordTextSearch.visibility = View.INVISIBLE
+        view.border_3.visibility = View.INVISIBLE
 
         view.cancel_search.setOnClickListener {
+            view.artistTextSearch.visibility = View.INVISIBLE
+            view.border_2.visibility = View.INVISIBLE
+            view.recordTextSearch.visibility = View.INVISIBLE
+            view.border_3.visibility = View.INVISIBLE
             view.searchEdit.setText("")
             view.recyclerArtistSearch.layoutManager = LinearLayoutManager(requireContext())
             view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(emptyList(), requireContext()) {}
@@ -74,13 +82,17 @@ class SearchFragment : Fragment() {
                             if (bodyArtist != null) {
                                 withContext(Dispatchers.Main){
                                     view.recyclerArtistSearch.layoutManager = LinearLayoutManager(requireContext())
-                                    if (bodyArtist.artists != null){
+                                    if (!bodyArtist.artists.isNullOrEmpty()){
+                                        view.artistTextSearch.visibility = View.VISIBLE
+                                        view.border_2.visibility = View.VISIBLE
                                         val artists: List<Artist> = responseArtist.body()!!.artists
                                         view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(artists, requireContext()) {
                                             val action = SearchFragmentDirections.actionSearchFragmentToArtistFragment2(it)
                                             findNavController().navigate(action)
                                         }
                                     }else{
+                                        view.artistTextSearch.visibility = View.INVISIBLE
+                                        view.border_2.visibility = View.INVISIBLE
                                         view.recyclerArtistSearch.adapter = ItemListAdapter<Artist>(
                                             emptyList(), requireContext()) {
 
@@ -92,15 +104,19 @@ class SearchFragment : Fragment() {
                             if (bodyAlbum != null) {
                                 withContext(Dispatchers.Main){
                                     view.recyclerRecordSearch.layoutManager = LinearLayoutManager(requireContext())
-                                    if (bodyAlbum.album != null){
+                                    if (!bodyAlbum.album.isNullOrEmpty()){
+                                        view.recordTextSearch.visibility = View.VISIBLE
+                                        view.border_3.visibility = View.VISIBLE
                                         val album: List<Album> = responseAlbum.body()!!.album
                                         view.recyclerRecordSearch.adapter = ItemListAdapter<Album>(album, requireContext()) {
                                             val action = SearchFragmentDirections.actionSearchFragmentToAlbumFragment(it)
                                             findNavController().navigate(action)
                                         }
                                         }else{
-                                        view.recyclerRecordSearch.adapter = ItemListAdapter<Album>(
-                                            emptyList(), requireContext()) {
+                                        view.recordTextSearch.visibility = View.INVISIBLE
+                                        view.border_3.visibility = View.INVISIBLE
+                                            view.recyclerRecordSearch.adapter = ItemListAdapter<Album>(
+                                                emptyList(), requireContext()) {
 
                                         }
                                     }
